@@ -7,11 +7,14 @@
   <div class="lista">
     <div v-for="item in listaPessoas" :key="item.id">
       <Usuario
-        @selecionado="setUsuarioSelecionado($event)"
-        @removeSelecionado="removeUsuarioSelecionado($event)"
+        @selecionado="adicionaFavorito($event)"
+        @removeSelecionado="removeFavorito($event)"
         :usuario="item"
-        :isFavoriiito="isFaaavorito(item.id)"
+        :isFavoriiito="isFavvvorito(item.id)"
       />
+      <!-- isFavoriiito: "Props" enviado deste componente para o filho "Usuario.vue".
+           isFavvvorito:
+           isFaaavorito: -->
     </div>
   </div>
 </template>
@@ -22,7 +25,7 @@ import { computed, ref } from "vue";
 import { usuarioStorrre } from "../store/usuario";
 export default {
   components: {
-    Usuario
+    Usuario,
   },
   setup() {
     /* Inicializando */
@@ -34,23 +37,22 @@ export default {
       return selecionados.value.map((x) => `${x.first_name} ${x.last_name}`);
     });
 
-    function setUsuarioSelecionado(idUsuario) {
-      const usuarioSelecionado = listaPessoas.find((x) => x.id == idUsuario);
-      selecionados.value = [...selecionados.value, usuarioSelecionado];
-    }
+    /* function setUsuarioSelecionado(idUsuario) {
+      store.adicionaUsuario(idUsuario);
+    } */
 
-    function removeUsuarioSelecionado(idUsuario) {
-      selecionados.value = selecionados.value.filter((x) => x.id !== idUsuario);
-    }
+    /* function removeUsuarioSelecionado(idUsuario) {
+      store.removeUsuario(idUsuario);
+    } */
 
     return {
       listaPessoas,
-      setUsuarioSelecionado,
-      removeUsuarioSelecionado,
       nomeSelecionados,
-      isFaaavorito: store.isFaaavorito
+      isFavvvorito: store.isFaaavorito,
+      adicionaFavorito: store.adicionaUsuario,
+      removeFavorito: store.removeUsuario,
     };
-  }
+  },
 };
 </script>
 

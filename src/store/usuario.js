@@ -1,19 +1,13 @@
-import {
-  defineStore
-} from "pinia";
+import { defineStore } from "pinia";
 
-/* Ação, métodos, funções. */
-/* Quando for fazer uma requisição para o backend,
-   é sempre feito na "actions" */
-/* É usado o "dispatch" para chamar o "actions" */
-//actions
-
-export const usuarioStorrre = defineStore('usuario', {
+export const usuarioStorrre = defineStore("usuario", {
   /* Propriedades reativas */
   /* Retorna uma função contento os "states" */
   state: () => {
+    /* Estes "states" são atualizados pelas "actions" */
     return {
-      listaPessoas: [{
+      listaPessoas: [
+        {
           id: 7,
           email: "michael.lawson@reqres.in",
           first_name: "Michael",
@@ -43,7 +37,8 @@ export const usuarioStorrre = defineStore('usuario', {
         },
       ],
 
-      listaFavoritos: [{
+      listaFavoritos: [
+        {
           id: 7,
           email: "michael.lawson@reqres.in",
           first_name: "Michael",
@@ -71,8 +66,8 @@ export const usuarioStorrre = defineStore('usuario', {
           last_name: "Fields",
           avatar: "https://reqres.in/img/faces/10-image.jpg",
         }, */
-      ]
-    }
+      ],
+    };
   },
 
   /* "getters" é parecido com as "propriedades computadas": */
@@ -85,8 +80,26 @@ export const usuarioStorrre = defineStore('usuario', {
     /* Ou no modo mais simples: */
     totalFavoritos: (state) => state.listaFavoritos.length,
 
-    isFaaavorito: (state) => {
-      return (id) => state.listaFavoritos.some(x => x.id === id)
-    }
-  }
-})
+    isFaaavorito: (state) => (id) =>
+      state.listaFavoritos.some((x) => x.id === id),
+  },
+
+  /* Ação, métodos, funções. */
+  /* As "actions" são funções que atualizam os "states" */
+  /* De dentro das "actions", temos acesso aos "states" e aos "getters" */
+  /* Quando for fazer uma requisição para o backend, é sempre feito na "actions" */
+  actions: {
+    adicionaUsuario(idUsuario) {
+      const usuarioSelecionado = this.listaPessoas.find(
+        (x) => x.id == idUsuario
+      );
+      this.listaFavoritos = [...this.listaFavoritos, usuarioSelecionado];
+    },
+
+    removeUsuario(idUsuario) {
+      this.listaFavoritos = this.listaFavoritos.filter(
+        (x) => x.id !== idUsuario
+      );
+    },
+  },
+});
