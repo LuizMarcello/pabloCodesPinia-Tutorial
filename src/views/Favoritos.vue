@@ -16,28 +16,35 @@
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
-import { usuarioStorrre } from "../store/usuario";
+import { onMounted } from "vue";
+import { usuarioStorrre, loginStorrre } from "../store/cadastro";
+import { storeToRefs } from "pinia";
 export default {
   components: {},
   setup() {
     /* Inicializando */
     const store = usuarioStorrre();
-    const listaFavoritos = ref([]);
+    const login = loginStorrre();
 
-    onMounted(() => {
-      listaFavoritos.value = store.listaFavoritos;
-    });
+    console.log(login.nome);
 
-    function removeFavorito(idUsuario) {
+    /* Propriedade computada */
+    //const listaFavoritos = computed(() => store.listaFavoritos);
+
+    const { listaFavoritos } = storeToRefs(store);
+
+    onMounted(() => {});
+
+    /* function removeFavorito(idUsuario) {
       listaFavoritos.value = listaFavoritos.value.filter(
         (x) => x.id !== idUsuario
       );
-    }
+    } */
 
+    /* Estes retornos, são para serem usados neste componente */
     return {
       listaFavoritos,
-      removeFavorito
+      removeFavorito: store.removeUsuario
     };
   }
 };

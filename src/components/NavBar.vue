@@ -13,7 +13,7 @@
 
 <script>
 import { computed } from "vue";
-import { usuarioStorrre } from "../store/usuario";
+import { usuarioStorrre } from "../store/cadastro";
 export default {
   setup() {
     /* Inicializando */

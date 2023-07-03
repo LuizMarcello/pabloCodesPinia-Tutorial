@@ -10,28 +10,34 @@
         @selecionado="adicionaFavorito($event)"
         @removeSelecionado="removeFavorito($event)"
         :usuario="item"
-        :isFavoriiito="isFavvvorito(item.id)"
+        :isFavoriiito="isFaaavorito(item.id)"
       />
-      <!-- isFavoriiito: "Props" enviado deste componente para o filho "Usuario.vue".
-           isFavvvorito:
-           isFaaavorito: -->
+      <!-- isFavoriiito: "Props" enviado deste componente para o filho "Usuario.vue". -->
+      <!-- isFavvvorito: Variavel retornada no return {}, para usar neste componente -->
+      <!-- isFaaavorito: Um "getter" no store "usuario.js" -->
     </div>
   </div>
 </template>
 
 <script>
 import Usuario from "@/components/Usuario.vue";
-import { computed, ref } from "vue";
-import { usuarioStorrre } from "../store/usuario";
+import { computed, ref, onMounted } from "vue";
+//import { usuarioStorrre } from "../store/usuario";
+import { usuarioStorrre } from "../store/cadastro";
+import { storeToRefs } from "pinia";
 export default {
   components: {
-    Usuario,
+    Usuario
   },
   setup() {
     /* Inicializando */
     const store = usuarioStorrre();
     const selecionados = ref([]);
-    const listaPessoas = store.listaPessoas;
+    //const listaPessoas = ref([]);
+
+    /* Fazendo desestruturação do store, mas usando a propriedade
+       do pinia "storeToRefs()", para não perder a reatividade. */
+    const { listaPessoas, isFaaavorito } = storeToRefs(store);
 
     const nomeSelecionados = computed(() => {
       return selecionados.value.map((x) => `${x.first_name} ${x.last_name}`);
@@ -45,14 +51,21 @@ export default {
       store.removeUsuario(idUsuario);
     } */
 
+    /* Arrow Function */
+    onMounted(async () => {
+      await store.buscaUsuarios("users?page=2");
+      listaPessoas.value = store.listaPessoas;
+    });
+
+    /* Estes retornos, são para serem usados neste componente */
     return {
       listaPessoas,
       nomeSelecionados,
-      isFavvvorito: store.isFaaavorito,
+      isFaaavorito,
       adicionaFavorito: store.adicionaUsuario,
-      removeFavorito: store.removeUsuario,
+      removeFavorito: store.removeUsuario
     };
-  },
+  }
 };
 </script>
 
